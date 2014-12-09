@@ -97,7 +97,7 @@ function exportCollection(desc, callback) {
 						index: {
 							_index: desc.index,
 							_type: desc.type,
-							_id: item[i]._id.toString();
+							_id: item[i]._id.toString()
 						}
 					});
 					delete item[i]._id;
