@@ -91,17 +91,16 @@ function exportCollection(desc, callback) {
 				me.pause();
 				
 				var bulkBody = [];
-				var indexQuery = {
-					index: {
-						_index: desc.index,
-						_type: desc.type
-					}
-				};
 				
 				for (i = 0; i < item.length; i++){
-					indexQuery.index._id = item[i]._id.toString();
+					bulkBody.push({
+						index: {
+							_index: desc.index,
+							_type: desc.type,
+							_id: item[i]._id.toString();
+						}
+					});
 					delete item[i]._id;
-					bulkBody.push(indexQuery);
 					bulkBody.push(item[i]);
 				}
 
