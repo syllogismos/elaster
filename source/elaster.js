@@ -8,6 +8,7 @@ var elastic = require('./elastic')(config);
 
 var through = require('through');
 var single = require('single-line-log');
+var highland = require('highland');
 
 require('colors');
 
@@ -79,32 +80,53 @@ function exportCollection(desc, callback) {
 
 				this.queue(item);
 			});
+			
+			var temp = through(function(item) {
+				this.queue(item);
+			});
 
 			var postToElastic = through(function (item) {
 				var me = this;
 
 				me.pause();
+				
+				var bulkBody = [];
+				var indexQuery = {
+					index: {
+						_index: desc.index,
+						_type: desc.type
+					}
+				};
+				
+				for (i = 0; i < item.length; i++){
+					indexQuery.index._id = item[i]._id.toString();
+					delete item[i]._id;
+					bulkBody.push(indexQuery);
+					bulkBody.push(item[i]);
+				}
 
-				elastic.create({
-					index: desc.index,
-					type: desc.type,
-					id: item._id.toString(),
-					body: item
-				}, function (err) {
+				elastic.bulk({
+					body: bulkBody
+				}, function (err, resp) {
 					if (err) {
-						console.error(('failed to create document in elastic.').bold.red);
+						console.error(('response timeout or failed to connect.').bold.red);
 						return next(err);
 					}
+					if (resp.errors){
+						console.error(('failed to create a document in elastic.').bold.red);
+						return next(resp);
+					}
 
-					me.queue(item);
+					me.queue(item.length);
 					me.resume();
 				});
 			});
 
 			var progress = function () {
 				var count = 0;
-				return through(function () {
-					var percentage = Math.floor(100 * ++count / total);
+				return through(function (length) {
+					count = count + length
+					var percentage = Math.floor(100 * count / total);
 					single(('------> processed ' + count + ' documents [' + percentage + '%]').magenta);
 				});
 			};
@@ -113,6 +135,7 @@ function exportCollection(desc, callback) {
 				.find(query)
 				.sort({_id: 1})
 				.pipe(takeFields)
+				.pipe(highland(temp).batch(2))
 				.pipe(postToElastic)
 				.pipe(progress());
 
