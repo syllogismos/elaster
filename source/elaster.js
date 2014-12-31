@@ -73,9 +73,10 @@ function exportCollection(desc, callback) {
 			console.log('----> streaming collection to elastic');
 
 			var takeFields = through(function (item) {
-				if (desc.fields) {
-					item = _.pick(item, desc.fields);
-				}
+				// if (desc.fields) {
+				// 	item = _.pick(item, desc.fields);
+				// }
+                                delete item['attrs']
 
 				this.queue(item);
 			});
@@ -93,7 +94,8 @@ function exportCollection(desc, callback) {
 				}, function (err) {
 					if (err) {
 						console.error(('failed to create document in elastic.').bold.red);
-						return next(err);
+                                                console.error(err);
+						// return next(err);
 					}
 
 					me.queue(item);
@@ -124,7 +126,7 @@ function exportCollection(desc, callback) {
 		if (err) {
 			console.error(('====> collection [' + desc.name + '] - failed to export.\n').bold.red);
 			console.error(err);
-			return callback(err);
+			// return callback(err);
 		}
 
 		var duration = moment.duration(moment().diff(started));
