@@ -1,11 +1,11 @@
 module.exports = {
 	mongo: {
-		connection: 'mongodb://172.31.28.46:27017/Snapdeal'
+		connection: 'mongodb://172.31.28.46:27017/SaveZippy'
 	},
 
 	elastic: {
 		host: {
-			host: 'localhost'
+			host: '172.31.35.190'
 		},
 
 		requestTimeout: 5000
@@ -13,17 +13,12 @@ module.exports = {
 
 	collections: [{
 		name: 'DataPoints',
-		index: 'snapdeal',
+		index: 'savezippy-2015-01-01-05-50',
+                // query: ({"st":{ $gte: new Date("2014-12-15"), $lte: new Date("2015-01-01T05:50:00Z")}}),
+                // query: ({"st":{ $gte: new Date("2014-12-01"), $lt: new Date("2014-12-15")}}),
+                // query: ({"st":{ $gte: new Date("2014-11-15"), $lt: new Date("2014-12-01")}}),
+                query: ({"st":{ $lt: new Date("2015-01-01T05:50:00Z")}}),
 		type: 'datapoints',
-		fields: ['_id', 'public', 'title', 'description', 'user', 'userData'],
-                mappings: {
-                          'datapoints': {
-                             'properties': {
-                               'categoryid': {
-                                     'type': 'string'
-                                  }
-                              }
-                          }
-                         }
+		fields: ['_id', 'public', 'title', 'description', 'user', 'userData']
 		}]
 };
