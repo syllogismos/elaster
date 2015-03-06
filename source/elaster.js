@@ -35,17 +35,19 @@ function exportCollection(desc, callback) {
 			});
 		},
 		function (next) {
-			console.log('----> dropping existing index [' + desc.index + ']');
-			elastic.indices.delete({index: desc.index}, function (err) {
-				var indexMissing = err && err.message.indexOf('IndexMissingException') === 0;
-				next(indexMissing ? null : err);
-			});
+                        return next(); // dont want to drop any indexes
+			// console.log('----> dropping existing index [' + desc.index + ']');
+			// elastic.indices.delete({index: desc.index}, function (err) {
+			// 	var indexMissing = err && err.message.indexOf('IndexMissingException') === 0;
+			// 	next(indexMissing ? null : err);
+			// });
 		},
 		function (next) {
-			console.log('----> creating new index [' + desc.index + ']');
-			elastic.indices.create({index: desc.index}, function (err) {
-				next(err);
-			});
+                        return next();
+			// console.log('----> creating new index [' + desc.index + ']');
+			// elastic.indices.create({index: desc.index}, function (err) {
+			// 	next(err);
+			// });
 		},
 		function (next) {
 			console.log('----> initialize index mapping');
@@ -76,7 +78,22 @@ function exportCollection(desc, callback) {
 				// if (desc.fields) {
 				// 	item = _.pick(item, desc.fields);
 				// }
-                                delete item['attrs']
+                                // Sample item:
+                                // {
+                                //             "_id" : ObjectId("54ccb5355e5cac04bb1a0b33"),
+                                //             "gt" : "2015-01-31T10:47:42",
+                                //             "indexName" : "shopclues-categorylistopened",
+                                //             "uid" : "54ccb21ae35b8c03c49264ae",
+                                //             "usId" : "54ccb21ae35b8c03c49264ad",
+                                //             "ut" : "2015-01-31T16:17:42",
+                                //             "act" : "Category List opened",
+                                //             "st" : "2015-01-31T10:48:52",
+                                //             "breadCrumb" : "toys-and-babycare/baby-care",
+                                //             "av" : "56",
+                                //             "os" : "ANDROID"
+                                // }
+
+                                // delete item['attrs']
 				this.queue(item);
 			});
 
@@ -84,9 +101,10 @@ function exportCollection(desc, callback) {
 				var me = this;
 
 				me.pause();
-
+                                var indexName = item['indexName'];
+                                delete item['indexName']
 				elastic.create({
-					index: desc.index,
+					index: indexName,
 					type: desc.type,
 					id: item._id.toString(),
 					body: item
