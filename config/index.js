@@ -5,7 +5,7 @@ module.exports = {
 
 	elastic: {
 		host: {
-			host: '172.31.35.190'
+			host: 'es.snap1'
 		},
 
 		requestTimeout: 5000
