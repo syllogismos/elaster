@@ -1,11 +1,13 @@
 module.exports = {
 	mongo: {
-		connection: 'mongodb://mongo.db.com:27017/ESTimeoutErrors'
+		// connection: 'mongodb://mongos0.moengage.com:27017/ESTimeoutErrors'
+                connection: 'mongodb://snapmongo:27017/ESTimeoutErrors'
 	},
 
 	elastic: {
 		host: {
-			host: 'es.node3'
+			// host: 'big.node1'
+                        host: 'snap1'
 		},
 
 		requestTimeout: 5000
@@ -18,7 +20,7 @@ module.exports = {
                 // query: ({"st":{ $gte: new Date("2014-12-01"), $lt: new Date("2014-12-15")}}),
                 // query: ({"st":{ $gte: new Date("2014-11-15"), $lt: new Date("2014-12-01")}}),
                 // query: ({"st":{ $lt: new Date("2015-01-01T05:50:00Z")}}),
-		type: 'datapoints',
+		type: 'datapoints'
 		// fields: ['_id', 'public', 'title', 'description', 'user', 'userData']
 		}]
 };
