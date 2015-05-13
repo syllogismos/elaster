@@ -1,6 +1,6 @@
 module.exports = {
 	mongo: {
-		connection: 'mongodb://mongo.db.com:27017/ESTimeoutErrors'
+		connection: 'mongodb://mongos0.moengage.com:27017/ESTimeoutErrors'
 	},
 
 	elastic: {
