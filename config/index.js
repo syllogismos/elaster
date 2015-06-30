@@ -5,7 +5,7 @@ module.exports = {
 
 	elastic: {
 		host: {
-			host: 'es.node3'
+			host: 'big1'
 		},
 
 		requestTimeout: 5000
