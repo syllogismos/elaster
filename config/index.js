@@ -5,7 +5,8 @@ module.exports = {
 
 	elastic: {
 		host: {
-			host: 'big1'
+			host: '172.31.36.27',
+                        host: '172.31.36.28'
 		},
 
 		requestTimeout: 5000
