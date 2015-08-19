@@ -8,7 +8,7 @@ module.exports = {
 			host: '172.31.46.49'
 		},
 
-		requestTimeout: 5000
+		requestTimeout: 10000
 	},
 
 	collections: [{
