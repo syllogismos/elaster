@@ -14,7 +14,7 @@ module.exports = {
 	collections: [{
 		name: 'DataPoints',
 		index: '',
-                // query: ({'indexName': {$regex: '^demoaccount'}}),
+                // query: ({'indexName': {$regex: '^spothero'}}),
                 // query: ({"st":{ $gte: new Date("2014-12-15"), $lte: new Date("2015-01-01T05:50:00Z")}}),
                 // query: ({"st":{ $gte: new Date("2014-12-01"), $lt: new Date("2014-12-15")}}),
                 // query: ({"st":{ $gte: new Date("2014-11-15"), $lt: new Date("2014-12-01")}}),
