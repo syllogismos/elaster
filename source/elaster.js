@@ -102,23 +102,30 @@ function exportCollection(desc, callback) {
 
 				me.pause();
                                 var indexName = item['indexName'];
-                                delete item['indexName']
-				elastic.create({
-					index: indexName,
-					type: desc.type,
-					id: item._id.toString(),
-					body: item
-				}, function (err) {
-					if (err) {
-						console.error(('failed to create document in elastic.').bold.red);
-                                                console.log(indexName.bold.green);
-                                                console.error(err);
-						// return next(err);
-					}
+                                if (indexName.search('demoapp-') == 0){
+                                    console.log('lol demoapp @@@');
+                                    console.log(indexName);
+				    me.queue(item);
+				    me.resume();
+                                } else {
+                                    delete item['indexName']
+				    elastic.create({
+				    	index: indexName,
+				    	type: desc.type,
+				    	id: item._id.toString(),
+				    	body: item
+				    }, function (err) {
+				    	if (err) {
+				    		console.error(('failed to create document in elastic.').bold.red);
+                                                    console.log(indexName.bold.green);
+                                                    console.error(err);
+				    		// return next(err);
+				    	}
 
-					me.queue(item);
-					me.resume();
-				});
+				    	me.queue(item);
+				    	me.resume();
+				    });
+                                }
 			});
 
 			var progress = function () {
